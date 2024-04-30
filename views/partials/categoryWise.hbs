@@ -1,0 +1,32 @@
+<div class="card-container">
+        {{#each  products as |category| }}
+                <h2>{{@key}}</h2>
+                <div class="product-list-cat">
+                    {{#each category as |product|}}
+                    <div class="card">
+                    <div class="card-image">
+                        <img src="{{product.imageUrl}}" alt="ProductImage">
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Name: {{product.name}}</li>
+                            <li>Price: {{product.price}}</li>
+                            <li>Description: {{product.description}}</li>
+                            <li>Seller:  {{product.seller}}</li>
+                            
+                                <div class="button-group">
+                                    <button><a href="/admin/product/update/{{product._id}}">
+                                    📝
+                                    </a></button>
+                                    <button><a href="/admin/product/delete/{{product._id}}">
+                                    🗑
+                                    </a></button>
+                                </div>
+                            
+                        </ul>
+                    </div>
+                </div>
+                    {{/each}}
+                </div>
+        {{/each}}
+    </div>
