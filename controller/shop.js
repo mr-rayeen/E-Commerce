@@ -38,44 +38,42 @@ module.exports.getProductById = async (req, res, next) => {
 }
 
 module.exports.getProductAddById= async (req, res, next)=>{
-  try {
-    const { id } = req.params;
-    let userId = req.user._id;
-    let userdb = await Users.findOne({ _id: userId });
-    let cart = userdb.cart;
-    let indx = -1;
-    cart.forEach((item, i) => {
-      if (item.id == id) {
-        indx = i;
-      }
-    })
-    if (indx == -1) {
-      cart.unshift({
-        id: id,
-        quantity: 1
-      })
+ try {
+        const { id } = req.params;
+        let cart = req.user.cart;
+        let indx = -1;
+        cart.forEach((item, i) => {
+            if (item.id == id) {
+                indx = i;
+            }
+        })
+        if (indx == -1) {
+            cart.unshift({
+                id: id,
+                quantity: 1
+            })
+        }
+        else {
+            cart[indx].quantity++;
+        }
+
+        // To make sure that db mei changes ho jaaye we need to save it
+        await req.user.save();
+        res.redirect('/shop/cart');
+    } catch (err) {
+        next(err);
     }
-    else {
-      cart[indx].quantity++;
-    }
-    await userdb.save();
-    res.redirect('/shop/cart');
-  }
-  catch (err) {
-    next(err);
-  }
 }
 
 module.exports.getCart = async (req, res, next) => {
   try {
     const { id } = req.params;
-    let userId = req.user._id;
-    let userdb = await Users.findOne({ _id: userId }).populate('cart.id');
-    let cart = userdb.cart;
-
-    res.render("shop/cart",{cart});
+    let user = await Users.findOne({ _id: req.user._id }).populate("cart.id");
+    console.log(user.cart);
+    res.render('shop/cart', {
+      cart: user.cart
+    });
   } catch (err) {
     next(err);
   }
-  
 }

@@ -26,19 +26,19 @@ module.exports = mongoose.model('user',  userSchema);
 
 let users = [
     {
-        "name ": "John Doe",
+        "name": "John Doe",
         "email": "john@gmail.com",
         "password": "123456789",
         "cart": []
     },
         {
-        "name ": "Dave Wells",
+        "name": "Dave Wells",
         "email": "dave@gmail.com",
         "password": "123456789",
         "cart": []
     },
     {
-        "name ": "Salman",
+        "name": "Salman",
         "email": "salman@gmail.com",
         "password": "123456789",
         "cart": []
