@@ -20,6 +20,9 @@
     box-shadow: 4px 3px 3px gray;
     padding: 1.5rem;
     text-align: start;
+    display: flex;
+    column-gap: 2rem;
+    justify-content: baseline;
 }
 .cart-product-image{
     display: flex;
@@ -31,7 +34,31 @@
     color: grey;
 
 }
-.cart-item > p > button{
+.quantity-button{
     background-color: transparent;
     border: none;
+}
+.cart-product-details{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: start;
+}
+.cartBuy{
+    width: 7rem;
+    padding: 0.7rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    background-color: blueviolet;
+    
+}
+.cartBuy > a{
+    text-decoration: none;
+    color: white;
+    align-self: center;
+}
+.buy-btn-box{
+    display: flex;
+    justify-content: center;
 }

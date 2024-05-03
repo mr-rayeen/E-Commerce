@@ -69,11 +69,34 @@ module.exports.getCart = async (req, res, next) => {
   try {
     const { id } = req.params;
     let user = await Users.findOne({ _id: req.user._id }).populate("cart.id");
+
+    let totalPrice = 0;
+    user.cart.forEach((item) => {
+      totalPrice += item.id.price*item.quantity;
+    })
     console.log(user.cart);
+    console.log(user.cart.id._id);
+    let idString = JSON.stringify(user.cart.id._id);
     res.render('shop/cart', {
-      cart: user.cart
+      cart: user.cart,
+      totalPrice,
+      idString
     });
   } catch (err) {
     next(err);
   }
+}
+
+module.exports.getIncreaseQuantity = async (req, res, next) => {
+  let pdid = req.params;
+  const user = await Users.findOne({ _id: req.user._id }).populate('cart.id');
+  if (user.cart.id == pdid) {
+    user.cart.quantity++;
+  }
+  await user.save();
+  res.send(user.cart);
+}
+module.exports.getCartBuy = async(req, res, next) => {
+  let user = await Users.findOne({ _id: req.user.id }).populate('cart.id');
+  
 }
