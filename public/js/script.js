@@ -1,25 +1,74 @@
-let cartList = document.querySelector('.cart-list');
-let button = document.querySelector('.quantity-button');
-let btnIncrease = document.querySelector(".increase");
-let btnDecrease = document.querySelector(".decrease");
-const axios = require("axios");
-// cartList.addEventListener('click', () => {
-//     if (btnIncrease.classList.contains("increase")) {
-//         console.log("+");
-//     } else {
-//       console.log("-");
-//     };
-// })
-async function increase(id) {
-    console.log(id);
-        axios.get(`/shop/cart/increase/${id}`)
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+let cartList = document.querySelector(".cart-list");
+
+function updateCart(cart) {
+  cartList.innerText = "";
+  cart.forEach((c) => {
+    let li = document.createElement("li");
+    li.classList.add("cart-item");
+    li.innerHTML = `
+        <div class="cart-product-image">
+            <img src=${c.id.imageUrl} alt="">
+        </div>
+            <div class="art-producct-details">
+                <p>Name: ${c.id.name}</p>
+                <p>Price: ${c.id.price}</p>
+            <div>
+                Quantity:
+                <a class="quantity" href="/shop/cart/increase/${c.id._id}">
+                    <button class="increaseQuantity quantity-button">
+                        +
+                    </button>
+                </a>${c.quantity}
+                <a class="quantity" href="/shop/cart/decrease/${c.id._id}">
+                    <button class="decreaseQuantity quantity-button">
+                        -
+                    </button>
+                </a>
+                <div id=${c.id._id}></div>
+            </div>
+        </div>
+        `;
+    cartList.appendChild(li);
+  });
 }
-function decrease() {
-    console.log("Clicked", "DECREASE BUTTON!");
-}
+
+cartList.addEventListener("click", (ev) => {
+  ev.preventDefault();
+  let item = ev.target;
+  if (item.classList.contains("increaseQuantity")) {
+    // console.log(item);
+    item = item.parentElement.parentElement;
+    item = item.lastElementChild;
+    // console.log(item)
+    let id = item.getAttribute("id");
+    // console.log(id)
+    axios
+      .get(`/shop/cart/increase/${id}`)
+      .then(({ data }) => {
+        // console.log(data);
+        cart = data;
+        updateCart(cart.id);
+        document.querySelector(".totalPrice").innerText = data.totalPrice;
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  } else if (item.classList.contains("decreaseQuantity")) {
+    item = item.parentElement.parentElement;
+    item = item.lastElementChild;
+    // console.log(item)
+    let id = item.getAttribute("id");
+    // console.log(id)
+    axios
+      .get(`/shop/cart/decrease/${id}`)
+      .then(({ data }) => {
+        cart = data;
+        // console.log(cart)
+        updateCart(cart.id);
+        document.querySelector(".totalPrice").innerText = data.totalPrice;
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
+});

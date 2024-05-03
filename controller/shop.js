@@ -74,13 +74,9 @@ module.exports.getCart = async (req, res, next) => {
     user.cart.forEach((item) => {
       totalPrice += item.id.price*item.quantity;
     })
-    console.log(user.cart);
-    console.log(user.cart.id._id);
-    let idString = JSON.stringify(user.cart.id._id);
     res.render('shop/cart', {
       cart: user.cart,
-      totalPrice,
-      idString
+      totalPrice
     });
   } catch (err) {
     next(err);
@@ -88,14 +84,62 @@ module.exports.getCart = async (req, res, next) => {
 }
 
 module.exports.getIncreaseQuantity = async (req, res, next) => {
-  let pdid = req.params;
-  const user = await Users.findOne({ _id: req.user._id }).populate('cart.id');
-  if (user.cart.id == pdid) {
-    user.cart.quantity++;
+const { id } = req.params;
+let cart = req.user.cart;
+let indx;
+cart.forEach((item, i) => {
+  if (item.id == id) {
+    indx = i;
   }
-  await user.save();
-  res.send(user.cart);
+});
+
+cart[indx].quantity++;
+req.user.save();
+try {
+  let user = await Users.findOne({ _id: req.user._id }).populate("cart.id");
+  let totalPrice = 0;
+  user.cart.forEach((item) => {
+    totalPrice += item.id.price * item.quantity;
+  });
+  res.send({
+    id: user.cart,
+    totalPrice,
+  });
+} catch (err) {
+  next(err);
 }
+}
+
+module.exports.getDecreaseQuantity = async (req, res, next) => {
+  const { id } = req.params;
+  let cart = req.user.cart;
+  let indx;
+  cart.forEach((item, i) => {
+    if (item.id == id) {
+      indx = i;
+    }
+  });
+  console.log('quantity: ', cart[indx].quantity);
+  if (cart[indx].quantity > 1)
+    cart[indx].quantity--;
+  else if (cart[indx].quantity == 1)
+    cart.splice(indx, 1);
+  req.user.save();
+  try {
+    let user = await Users.findOne({ _id: req.user._id }).populate("cart.id");
+    let totalPrice = 0;
+    user.cart.forEach((item) => {
+      totalPrice += item.id.price * item.quantity;
+    });
+    res.send({
+      id: user.cart,
+      totalPrice,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.getCartBuy = async(req, res, next) => {
   let user = await Users.findOne({ _id: req.user.id }).populate('cart.id');
   

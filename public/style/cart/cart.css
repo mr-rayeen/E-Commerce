@@ -1,10 +1,18 @@
 .cart-product-image{
     width: 300px;
 }
+.cart-product-image > img {
+    object-fit: contain;
+    width: 250px;
+    height: 200px;
+}
 .cart-list-container{
-    width: 100%;
+    width: 45%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 3rem;
 }
 .cart-list{
     display: flex;
@@ -35,8 +43,8 @@
 
 }
 .quantity-button{
-    background-color: transparent;
-    border: none;
+    background-color: rgb(165, 164, 164);
+    padding: 0.1rem 0.2rem;
 }
 .cart-product-details{
     display: flex;
