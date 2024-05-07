@@ -44,7 +44,7 @@ module.exports.getProductAddById= async (req, res, next)=>{
         let indx = -1;
         cart.forEach((item, i) => {
             if (item.id == id) {
-                indx = i;
+              indx = i;
             }
         })
         if (indx == -1) {
@@ -109,7 +109,7 @@ try {
   next(err);
 }
 }
-
+ 
 module.exports.getDecreaseQuantity = async (req, res, next) => {
   const { id } = req.params;
   let cart = req.user.cart;
@@ -119,7 +119,6 @@ module.exports.getDecreaseQuantity = async (req, res, next) => {
       indx = i;
     }
   });
-  console.log('quantity: ', cart[indx].quantity);
   if (cart[indx].quantity > 1)
     cart[indx].quantity--;
   else if (cart[indx].quantity == 1)
