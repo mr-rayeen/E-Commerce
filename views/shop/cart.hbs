@@ -44,12 +44,18 @@
             </li>
                 {{/each}}
             </ul>
+            {{#if totalPrice}}
             <div class="buy-btn-box">
+                <a href="/shop/cart/buy" >
                     <button class="cartBuy">
-                         <a href="/shop/cart/buy" >Buy Now</a>
+                         Buy Now
                    </button>
+                </a>
             </div>
-
+            {{/if}}
+            {{#unless totalPrice}}
+            <h2>Your Cart is Empty!</h2>
+            {{/unless}}
         </div>
     </div>
     <script src="/js/utils/axios.min.js"></script>

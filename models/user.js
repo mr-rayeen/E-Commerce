@@ -19,7 +19,14 @@ const userSchema = new Schema({
             ref:"products"
         },
         quantity: Number
-    }]
+    }],
+    address: {
+        house:String, 
+        street: String,
+        city: String,
+        zipcode: String,
+        phone: String
+    }
 })
 
 module.exports = mongoose.model('user',  userSchema);
