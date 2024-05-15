@@ -5,7 +5,6 @@ const PORT = 4444;
 const mongoose = require('mongoose'); 
 const hbs = require('hbs');
 const User = require('./models/user');
-const Products = require('./models/products')
 
 app.use(async (req, res, next)=>{
     let user = await User.findOne({
@@ -33,17 +32,8 @@ app.use('/admin', adminRouter);
 //  Shop Page Route
 app.use('/shop', shopRouter);
 
-app.get('/', async (req, res) => {
-    try {
-        let products = await Products.find();
-        res.render('index', {
-            products
-        });
-
-    } catch (err) {
-        next(err)
-    }
-})
+const homeRouter = require('./routes/home')
+app.get('/', homeRouter);
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/ecommerce').then(() => {
